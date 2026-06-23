@@ -1,0 +1,56 @@
+/* Newsqora marketing site — design tokens & base styles
+   Re-implemented from the design handoff. Light is the default theme. */
+
+html, body { margin: 0; padding: 0; }
+body { background: #E9E3D8; }
+*, *::before, *::after { box-sizing: border-box; }
+::selection { background: var(--accent-bg); color: var(--ink); }
+
+[data-theme="light"] {
+  --paper:#FAF7F1; --card:#FFFFFF; --raised:#FFFFFF;
+  --ink:#1A1726; --ink-soft:#4A4658; --ink-mute:#8A8598;
+  --hairline:rgba(26,23,38,0.10); --hairline-strong:rgba(26,23,38,0.18);
+  --accent:#6D20FF; --accent-soft:#C9B8FF; --accent-bg:#EFEAFF; --honey:#B8780F;
+  --c-trust:#5E7C6B; --c-caution:#C98A2B; --c-disputed:#B5503F; --c-unverified:#908A9A;
+  --c-trust-bg:#DBE5DE; --c-caution-bg:#F0DDB8; --c-disputed-bg:#EDD3CC; --c-unverified-bg:#E4E1E8;
+  --shadow-sm:0 1px 2px rgba(40,20,80,0.04), 0 1px 3px rgba(40,20,80,0.03);
+  --shadow-md:0 1px 2px rgba(40,20,80,0.05), 0 8px 24px rgba(40,20,80,0.07);
+  --shadow-lg:0 2px 6px rgba(40,20,80,0.07), 0 24px 60px rgba(40,20,80,0.12);
+  --stage:#E9E3D8;
+}
+[data-theme="dark"] {
+  --paper:#0B0A14; --card:#1E1B2E; --raised:#2A2740;
+  --ink:#F4F2FB; --ink-soft:#B9B5C9; --ink-mute:#7E7A90;
+  --hairline:rgba(244,242,251,0.10); --hairline-strong:rgba(244,242,251,0.18);
+  --accent:#8A4DFF; --accent-soft:#4E2D8E; --accent-bg:#241640; --honey:#F5B544;
+  --c-trust:#7FA08C; --c-caution:#D8A24E; --c-disputed:#CC6F5C; --c-unverified:#A8A2B6;
+  --c-trust-bg:#20302A; --c-caution-bg:#332817; --c-disputed-bg:#34221C; --c-unverified-bg:#22202E;
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md:0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.25);
+  --shadow-lg:0 2px 6px rgba(0,0,0,0.35), 0 24px 60px rgba(0,0,0,0.5);
+  --stage:#08060d;
+}
+
+@keyframes nq-rise { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+@keyframes nq-pulse { 0%,100% { opacity:0.35; } 50% { opacity:1; } }
+
+/* App shell: themed wrapper. background-color longhand only (no transition on
+   the var-driven background — avoids the documented theme-switch stick bug). */
+#app {
+  font-family: 'Hanken Grotesk', -apple-system, system-ui, sans-serif;
+  font-weight: 500;
+  color: var(--ink);
+  background-color: var(--paper);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Social buttons: hover/active states (the DC style-hover / style-active). */
+.nq-social:hover {
+  transform: translateY(-3px);
+  background: color-mix(in srgb, var(--accent) 86%, #000);
+  box-shadow: 0 10px 26px color-mix(in srgb, var(--accent) 42%, transparent);
+}
+.nq-social:active { transform: translateY(-1px) scale(0.96); }
+
+.nq-pulse-dot { animation: nq-pulse 2.4s ease-in-out infinite; }

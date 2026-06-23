@@ -5,22 +5,43 @@ custom apex domain `newsqora.com`.
 
 ## How this repo is deployed
 
-- GitHub Pages serves the static files from this repository.
-- `CNAME` tells GitHub Pages the custom domain is `newsqora.com`.
-- `index.html` is the entry point (currently a placeholder — replace it with
-  your design from Claude).
-- `.nojekyll` disables Jekyll processing so files/folders starting with `_`
-  are served as-is.
+GitHub Pages serves these static files directly — **no build step**.
 
-## Adding your design
+| File | Purpose |
+|------|---------|
+| `index.html` | Page shell: `<head>` meta, Open Graph tags, JSON-LD, font/style links |
+| `styles.css` | Design tokens (light/dark themes) and base styles |
+| `app.js` | Renders the three views, handles routing, theme toggle, scroll-spy |
+| `fonts.css` + `fonts/` | Self-hosted fonts (Newsreader, Hanken Grotesk, IBM Plex Mono) — GDPR: no Google Fonts CDN calls |
+| `newsqora-mark.svg`, `logo.png`, `logo-square.png` | Brand assets (`logo-square.png` is used for JSON-LD / social cards) |
+| `404.html` | Copy of `index.html` — the SPA fallback so deep links like `/privacy` work on GitHub Pages |
+| `CNAME` | Tells GitHub Pages the custom domain is `newsqora.com` |
+| `.nojekyll` | Disables Jekyll processing |
 
-Replace `index.html` (and add any CSS/JS/image folders) with your exported
-design. Keep the `CNAME` and `.nojekyll` files in place. Commit and push —
-GitHub Pages redeploys automatically.
+### Routes
 
-If your design is a **React/Vite/Next** app, it must be built to static files
-first (e.g. `npm run build`) and the build output published to Pages. Tell
-Claude which framework it is and it can wire up a GitHub Actions build.
+Client-side routing via the History API: `/` (landing), `/privacy`, `/terms`.
+Because Pages has no server-side routing, `404.html` is a copy of `index.html`;
+GitHub serves it for unknown paths and `app.js` reads `location.pathname` to
+render the right view. **If you edit `index.html`, re-copy it to `404.html`.**
+
+### Editing the site
+
+- Copy / content lives in the data arrays at the top of `app.js`
+  (`STEPS`, `PILLARS`, `PRIVACY`, `TERMS`, `SOCIALS`, …).
+- Colours, fonts, spacing tokens live in `styles.css`.
+- Legal copy is a **draft with bracketed placeholders**
+  (`[CONTROLLER NAME]`, `[RETENTION PERIOD]`, `[EFFECTIVE DATE]`, …) — fill
+  these in before launch, after legal review.
+
+### Preview locally
+
+Any static server works, e.g. from the repo root:
+
+```sh
+python3 -m http.server 8000
+# then open http://localhost:8000
+```
 
 ## Enabling GitHub Pages (one-time)
 
