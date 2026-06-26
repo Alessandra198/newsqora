@@ -92,6 +92,7 @@
 
   function routeFromPath() {
     var p = location.pathname.replace(/\/+$/, '') || '/';
+    p = p.replace(/\.html$/, ''); // tolerate /privacy.html as well as /privacy
     if (p === '/privacy') return 'privacy';
     if (p === '/terms') return 'terms';
     return 'home';

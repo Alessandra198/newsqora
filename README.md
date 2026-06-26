@@ -12,18 +12,26 @@ GitHub Pages serves these static files directly — **no build step**.
 | `index.html` | Page shell: `<head>` meta, Open Graph tags, JSON-LD, font/style links |
 | `styles.css` | Design tokens (light/dark themes) and base styles |
 | `app.js` | Renders the three views, handles routing, theme toggle, scroll-spy |
+| `privacy.html`, `terms.html` | Real pages for `/privacy` and `/terms` so those URLs return HTTP 200 (required for Google to index them) |
 | `fonts.css` + `fonts/` | Self-hosted fonts (Newsreader, Hanken Grotesk, IBM Plex Mono) — GDPR: no Google Fonts CDN calls |
 | `newsqora-mark.svg`, `logo.png`, `logo-square.png` | Brand assets (`logo-square.png` is used for JSON-LD / social cards) |
-| `404.html` | Copy of `index.html` — the SPA fallback so deep links like `/privacy` work on GitHub Pages |
+| `404.html` | Copy of `index.html` — SPA fallback for any genuinely unknown path |
 | `CNAME` | Tells GitHub Pages the custom domain is `newsqora.com` |
 | `.nojekyll` | Disables Jekyll processing |
 
 ### Routes
 
 Client-side routing via the History API: `/` (landing), `/privacy`, `/terms`.
-Because Pages has no server-side routing, `404.html` is a copy of `index.html`;
-GitHub serves it for unknown paths and `app.js` reads `location.pathname` to
-render the right view. **If you edit `index.html`, re-copy it to `404.html`.**
+`/privacy` and `/terms` are backed by real files (`privacy.html`, `terms.html`)
+that GitHub Pages serves at those clean URLs with an **HTTP 200** status — this
+matters because Google will not index a URL that responds 404, and the SPA
+fallback alone returns 404. `app.js` reads `location.pathname` and renders the
+matching view; each file also carries the correct static `<title>`/description.
+
+`404.html` (a copy of `index.html`) remains the fallback for any other unknown
+path. **If you edit the `<head>` of `index.html`, mirror the change into
+`404.html`, `privacy.html`, and `terms.html`** (the latter two keep their own
+title, description, and canonical).
 
 ### Editing the site
 
