@@ -101,17 +101,17 @@
   // render the SPA, so keeping these in sync improves how each route appears.
   var META = {
     home: {
-      title: 'Newsqora — Every question is welcome. Every answer is honest.',
+      title: 'Newsqora · Every question is welcome. Every answer is honest.',
       desc: 'Newsqora is a mobile fact-checking research instrument. It verifies claims, links, and screenshots against real sources and returns a graded confidence with full source attribution.',
       path: '/'
     },
     privacy: {
-      title: 'Privacy Policy — Newsqora',
+      title: 'Privacy Policy · Newsqora',
       desc: 'How Newsqora processes data under the GDPR: data controller, legal bases, EU processing, international transfers, retention, and your rights.',
       path: '/privacy'
     },
     terms: {
-      title: 'Terms of Service — Newsqora',
+      title: 'Terms of Service · Newsqora',
       desc: 'The terms governing use of Newsqora: what the service provides, acceptable use, accounts and sign-in, accuracy, and limitations.',
       path: '/terms'
     }
