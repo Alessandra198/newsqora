@@ -54,3 +54,58 @@ body { background: #E9E3D8; }
 .nq-social:active { transform: translateY(-1px) scale(0.96); }
 
 .nq-pulse-dot { animation: nq-pulse 2.4s ease-in-out infinite; }
+
+/* Hamburger button: hidden on desktop, shown on phones. */
+.nq-burger { display: none; }
+
+/* ---- Phone layout (<= 640px) -------------------------------------------
+   Inline styles win over the stylesheet, so phone overrides use !important. */
+@media (max-width: 640px) {
+  /* Show the hamburger; collapse the nav into a dropdown panel. */
+  .nq-burger { display: inline-flex !important; }
+
+  .nq-nav {
+    display: none !important;
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    right: clamp(20px, 5vw, 40px) !important;
+    left: clamp(20px, 5vw, 40px) !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    gap: 2px !important;
+    background: var(--paper) !important;
+    border: 1px solid var(--hairline) !important;
+    border-radius: 14px !important;
+    box-shadow: var(--shadow-lg) !important;
+    padding: 10px !important;
+  }
+  .nq-nav.open { display: flex !important; }
+
+  /* Dropdown items: full-width rows, comfortable tap targets. */
+  .nq-nav > a,
+  .nq-nav > button {
+    width: 100% !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+    margin-left: 0 !important;
+    padding: 12px 14px !important;
+    border-radius: 10px !important;
+  }
+  .nq-nav > a:last-child { margin-top: 6px !important; text-align: center !important; justify-content: center !important; }
+
+  /* Social icons: keep all six on a single row. */
+  .nq-social-row {
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    max-width: none !important;
+  }
+  .nq-social-row .nq-social { width: 40px !important; height: 40px !important; }
+
+  /* Confidence chips: one per line. */
+  .nq-chips {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+}

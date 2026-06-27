@@ -87,7 +87,7 @@
 
   // ---- State -------------------------------------------------------------
   var app = document.getElementById('app');
-  var state = { route: 'home', theme: 'light', active: 'top' };
+  var state = { route: 'home', theme: 'light', active: 'top', menuOpen: false };
 
   function routeFromPath() {
     var p = location.pathname.replace(/\/+$/, '') || '/';
@@ -150,12 +150,15 @@
       '<a href="' + BETA_HREF + '" style="color:#fff; text-decoration:underline; text-underline-offset:2px; margin-left:6px;">Request access</a>' +
     '</div>' +
     '<header style="position:sticky; top:0; z-index:40; backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%); background:color-mix(in srgb, var(--paper) 82%, transparent); border-bottom:1px solid var(--hairline);">' +
-      '<div style="max-width:1140px; margin:0 auto; padding:14px clamp(20px,5vw,40px); display:flex; align-items:center; justify-content:space-between; gap:24px;">' +
+      '<div class="nq-headbar" style="max-width:1140px; margin:0 auto; padding:14px clamp(20px,5vw,40px); display:flex; align-items:center; justify-content:space-between; gap:24px; position:relative;">' +
         '<a href="/" data-link="home" style="display:flex; align-items:center; gap:11px; text-decoration:none; flex-shrink:0;">' +
           '<img src="newsqora-mark.svg" alt="Newsqora" width="34" height="21" style="display:block; width:34px; height:auto;">' +
           '<span style="font-family:\'Newsreader\',Georgia,serif; font-weight:500; font-size:23px; letter-spacing:-.01em; color:var(--accent);">Newsqora</span>' +
         '</a>' +
-        '<nav style="display:flex; align-items:center; gap:4px; flex-wrap:wrap; justify-content:flex-end;">' +
+        '<button class="nq-burger" data-action="menu" aria-label="Menu" aria-expanded="' + (state.menuOpen ? 'true' : 'false') + '" style="width:38px; height:38px; align-items:center; justify-content:center; background:transparent; border:1px solid var(--hairline-strong); border-radius:10px; color:var(--ink); cursor:pointer;">' +
+          '<span style="font-size:18px; line-height:1;">' + (state.menuOpen ? '✕' : '☰') + '</span>' +
+        '</button>' +
+        '<nav class="nq-nav' + (state.menuOpen ? ' open' : '') + '" style="display:flex; align-items:center; gap:4px; flex-wrap:wrap; justify-content:flex-end;">' +
           links +
           '<button data-action="theme" aria-label="Toggle colour theme" style="width:38px; height:38px; display:inline-flex; align-items:center; justify-content:center; background:transparent; border:1px solid var(--hairline-strong); border-radius:10px; color:var(--ink); margin-left:6px; cursor:pointer;">' +
             '<span style="font-size:15px;">' + (state.theme === 'dark' ? '☀' : '☾') + '</span>' +
@@ -257,7 +260,7 @@
         '<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(248px,1fr)); gap:clamp(20px,3vw,32px);">' + steps + '</div>' +
         '<div style="margin-top:clamp(36px,5vw,52px); display:flex; flex-direction:column; gap:14px;">' +
           '<p style="font-family:\'IBM Plex Mono\',monospace; font-size:12px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-mute); margin:0;">The grade is never binary</p>' +
-          '<div style="display:flex; flex-wrap:wrap; gap:10px;">' + chips + '</div>' +
+          '<div class="nq-chips" style="display:flex; flex-wrap:wrap; gap:10px;">' + chips + '</div>' +
         '</div>' +
       '</div>' +
     '</section>' +
@@ -339,7 +342,7 @@
       '<div style="max-width:1140px; margin:0 auto; padding:clamp(48px,7vw,76px) clamp(20px,5vw,40px); display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px;">' +
         '<p style="font-family:\'IBM Plex Mono\',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin:0;">Follow Newsqora</p>' +
         '<h2 style="font-family:\'Newsreader\',Georgia,serif; font-weight:400; font-size:clamp(30px,5vw,52px); line-height:1.1; letter-spacing:-.02em; margin:0 0 6px; max-width:20ch; text-wrap:balance;">Stay connected wherever you are.</h2>' +
-        '<div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:22px; max-width:530px;">' + btns + '</div>' +
+        '<div class="nq-social-row" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:22px; max-width:530px;">' + btns + '</div>' +
       '</div>' +
     '</section>';
   }
@@ -437,12 +440,21 @@
     var t = e.target.closest('[data-action], [data-nav], [data-link]');
     if (!t) return;
 
-    if (t.getAttribute('data-action') === 'theme') {
+    var action = t.getAttribute('data-action');
+    if (action === 'menu') {
+      e.preventDefault();
+      state.menuOpen = !state.menuOpen;
+      render();
+      return;
+    }
+    if (action === 'theme') {
       e.preventDefault();
       state.theme = state.theme === 'dark' ? 'light' : 'dark';
       render();
       return;
     }
+    // any nav/link click also closes the mobile dropdown
+    state.menuOpen = false;
     var navId = t.getAttribute('data-nav');
     if (navId) { e.preventDefault(); scrollToSection(navId); return; }
     var link = t.getAttribute('data-link');
