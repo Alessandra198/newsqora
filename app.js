@@ -1,4 +1,4 @@
-/* Newsqora marketing site — vanilla re-implementation of the design handoff.
+/* Newsqora marketing site · vanilla re-implementation of the design handoff.
    Three routes (/, /privacy, /terms), theme toggle, scroll-spy nav.
    No build step; deploys directly to GitHub Pages. */
 (function () {

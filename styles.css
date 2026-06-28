@@ -1,4 +1,4 @@
-/* Newsqora marketing site — design tokens & base styles
+/* Newsqora marketing site · design tokens & base styles
    Re-implemented from the design handoff. Light is the default theme. */
 
 html, body { margin: 0; padding: 0; }
@@ -35,7 +35,7 @@ body { background: #E9E3D8; }
 @keyframes nq-pulse { 0%,100% { opacity:0.35; } 50% { opacity:1; } }
 
 /* App shell: themed wrapper. background-color longhand only (no transition on
-   the var-driven background — avoids the documented theme-switch stick bug). */
+   the var-driven background · avoids the documented theme-switch stick bug). */
 #app {
   font-family: 'Hanken Grotesk', -apple-system, system-ui, sans-serif;
   font-weight: 500;
