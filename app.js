@@ -85,6 +85,15 @@
     { h: '9 · Changes and contact', body: '<p style="margin:0">We may update these terms as the service evolves; material changes will be posted here with an updated date. Questions about these terms: <a href="mailto:hello@newsqora.com" style="color:var(--accent)">hello@newsqora.com</a>.</p>' }
   ];
 
+  var COOKIES = [
+    { h: 'This website uses no cookies', body: '<p style="margin:0">The Newsqora marketing website (newsqora.com) <strong style="color:var(--ink)">does not use cookies</strong>. It sets no cookies of its own and uses no third-party cookies. There is therefore no cookie banner, because there is nothing to consent to.</p>' },
+    { h: 'No tracking and no third-party services', body: '<p style="margin:0 0 12px">This website runs <strong style="color:var(--ink)">no analytics, advertising, or tracking scripts</strong> of any kind: no Google Analytics, no advertising pixels, and no social-media tracking.</p><p style="margin:0">Fonts are <strong style="color:var(--ink)">self-hosted</strong> on our own domain rather than loaded from a third-party font service, so visiting the site makes no calls to outside providers. Links to our social media profiles are ordinary links: they load nothing until you choose to click them, at which point the destination site applies its own cookie and privacy policies.</p>' },
+    { h: 'Nothing is stored on your device', body: '<p style="margin:0">Beyond setting no cookies, the site stores nothing on your device: no local storage and no session storage. Your browser may temporarily cache static files such as fonts and images to load the page faster; this is standard browser caching, contains no personal data, and is controlled entirely by your browser settings.</p>' },
+    { h: 'The Newsqora app', body: '<p style="margin:0">This Cookie Policy covers the website only. How the Newsqora mobile application handles data, including sign-in and optional analytics, is described in our <a href="/privacy" data-link="privacy" style="color:var(--accent)">Privacy Policy</a>.</p>' },
+    { h: 'Changes to this policy', body: '<p style="margin:0">If we ever introduce cookies or third-party services on this website, we will update this policy and, where the law requires it, ask for your consent before any non-essential cookie is set.</p>' },
+    { h: 'Contact', body: '<p style="margin:0">Questions about this Cookie Policy: <a href="mailto:hello@newsqora.com" style="color:var(--accent)">hello@newsqora.com</a>.</p>' }
+  ];
+
   // ---- State -------------------------------------------------------------
   var app = document.getElementById('app');
   var state = { route: 'home', theme: 'light', active: 'top', menuOpen: false };
@@ -94,6 +103,7 @@
     p = p.replace(/\.html$/, ''); // tolerate /privacy.html as well as /privacy
     if (p === '/privacy') return 'privacy';
     if (p === '/terms') return 'terms';
+    if (p === '/cookies') return 'cookies';
     return 'home';
   }
 
@@ -114,6 +124,11 @@
       title: 'Terms of Service · Newsqora',
       desc: 'The terms governing use of Newsqora: what the service provides, acceptable use, accounts and sign-in, accuracy, and limitations.',
       path: '/terms'
+    },
+    cookies: {
+      title: 'Cookie Policy · Newsqora',
+      desc: 'The Newsqora website uses no cookies and no tracking. This Cookie Policy explains what that means and how the site handles data.',
+      path: '/cookies'
     }
   };
 
@@ -364,6 +379,7 @@
           '<p style="font-family:\'IBM Plex Mono\',monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-mute); margin:0 0 3px;">Legal</p>' +
           '<a href="/privacy" data-link="privacy" style="font-size:14px; color:var(--ink-soft); text-decoration:none;">Privacy Policy</a>' +
           '<a href="/terms" data-link="terms" style="font-size:14px; color:var(--ink-soft); text-decoration:none;">Terms of Service</a>' +
+          '<a href="/cookies" data-link="cookies" style="font-size:14px; color:var(--ink-soft); text-decoration:none;">Cookie Policy</a>' +
         '</div>' +
         '<div style="display:flex; flex-direction:column; gap:11px;">' +
           '<p style="font-family:\'IBM Plex Mono\',monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-mute); margin:0 0 3px;">Contact</p>' +
@@ -382,6 +398,7 @@
     var main;
     if (state.route === 'privacy') main = legal('Privacy Policy', false, PRIVACY);
     else if (state.route === 'terms') main = legal('Terms of Service', false, TERMS);
+    else if (state.route === 'cookies') main = legal('Cookie Policy', false, COOKIES);
     else main = landing();
 
     app.setAttribute('data-theme', state.theme);
@@ -392,7 +409,7 @@
 
   function navigate(route, opts) {
     opts = opts || {};
-    var path = route === 'privacy' ? '/privacy' : route === 'terms' ? '/terms' : '/';
+    var path = route === 'privacy' ? '/privacy' : route === 'terms' ? '/terms' : route === 'cookies' ? '/cookies' : '/';
     if (!opts.replace) history.pushState({ route: route }, '', path + (opts.hash || ''));
     state.route = route;
     state.active = 'top';
