@@ -21,26 +21,42 @@ GitHub Pages serves these static files directly — **no build step**.
 
 ### Routes
 
-Client-side routing via the History API: `/` (landing), `/privacy`, `/terms`.
-`/privacy` and `/terms` are backed by real files (`privacy.html`, `terms.html`)
-that GitHub Pages serves at those clean URLs with an **HTTP 200** status — this
-matters because Google will not index a URL that responds 404, and the SPA
-fallback alone returns 404. `app.js` reads `location.pathname` and renders the
-matching view; each file also carries the correct static `<title>`/description.
+Client-side routing via the History API: `/` (landing), `/privacy`, `/terms`,
+`/cookies`. Each is backed by a real file (`privacy.html`, `terms.html`,
+`cookies.html`) that GitHub Pages serves at the clean URL with an **HTTP 200**
+status — Google will not index a URL that responds 404, and the SPA fallback
+alone returns 404. `app.js` reads `location.pathname` and renders the matching
+view; each file also carries the correct static `<title>`/description.
 
 `404.html` (a copy of `index.html`) remains the fallback for any other unknown
-path. **If you edit the `<head>` of `index.html`, mirror the change into
-`404.html`, `privacy.html`, and `terms.html`** (the latter two keep their own
-title, description, and canonical).
+path.
+
+### Pre-rendering (important)
+
+The content is built by `app.js` at runtime, so the raw HTML would otherwise be
+an empty `<div id="app">` shell — invisible to compliance scanners, archive
+bots, and no-JS clients (and fragile for SEO). `prerender.py` fixes this: it
+loads each route in headless Chrome and bakes the fully-rendered markup into the
+static HTML files. `app.js` still loads and re-renders on top for interactivity
+(progressive enhancement), so there is no duplication.
+
+**The committed `index.html`, `privacy.html`, `terms.html`, `cookies.html`, and
+`404.html` are generated artifacts.** After editing any content, copy, `<head>`,
+or markup in `app.js`, regenerate them:
+
+```sh
+python3 prerender.py
+```
+
+Then commit the updated HTML files alongside your `app.js` change.
 
 ### Editing the site
 
 - Copy / content lives in the data arrays at the top of `app.js`
-  (`STEPS`, `PILLARS`, `PRIVACY`, `TERMS`, `SOCIALS`, …).
+  (`STEPS`, `PILLARS`, `PRIVACY`, `TERMS`, `COOKIES`, `SOCIALS`, …).
 - Colours, fonts, spacing tokens live in `styles.css`.
-- Legal copy is a **draft with bracketed placeholders**
-  (`[CONTROLLER NAME]`, `[RETENTION PERIOD]`, `[EFFECTIVE DATE]`, …) — fill
-  these in before launch, after legal review.
+- After any content edit, **run `python3 prerender.py`** (see above) so the
+  static HTML stays in sync.
 
 ### Preview locally
 
