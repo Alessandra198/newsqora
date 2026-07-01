@@ -329,7 +329,7 @@
     '</div>';
   }
 
-  function legal(title, draftBadge, sections) {
+  function legal(title, sections) {
     var body = sections.map(function (s) {
       return '<section>' +
         '<h2 style="font-family:\'Newsreader\',Georgia,serif; font-weight:500; font-size:clamp(20px,3vw,26px); line-height:1.2; letter-spacing:-.012em; margin:0 0 12px;">' + s.h + '</h2>' +
@@ -337,14 +337,9 @@
       '</section>';
     }).join('');
 
-    var badge = draftBadge
-      ? '<div style="display:inline-flex; align-items:center; gap:8px; margin:22px 0 16px; font-family:\'IBM Plex Mono\',monospace; font-size:11px; letter-spacing:.04em; text-transform:uppercase; color:var(--honey); background:var(--c-caution-bg); padding:6px 12px; border-radius:999px;"><span style="width:6px; height:6px; border-radius:50%; background:var(--honey);"></span>Draft: pending legal review</div>'
-      : '';
-
     return '<div style="max-width:740px; margin:0 auto; padding:clamp(44px,7vw,80px) clamp(20px,5vw,40px) clamp(64px,9vw,100px);">' +
       '<a href="/" data-link="home" style="font-family:\'IBM Plex Mono\',monospace; font-size:12px; color:var(--accent); text-decoration:none;">← Back to home</a>' +
-      badge +
-      '<h1 style="font-family:\'Newsreader\',Georgia,serif; font-weight:400; font-size:clamp(32px,5.4vw,52px); line-height:1.08; letter-spacing:-.02em; margin:' + (draftBadge ? '0 0 12px' : '26px 0 12px') + ';">' + title + '</h1>' +
+      '<h1 style="font-family:\'Newsreader\',Georgia,serif; font-weight:400; font-size:clamp(32px,5.4vw,52px); line-height:1.08; letter-spacing:-.02em; margin:26px 0 12px;">' + title + '</h1>' +
       '<p style="font-family:\'IBM Plex Mono\',monospace; font-size:12px; color:var(--ink-mute); margin:0 0 40px;">Last updated: June 2026 · newsqora.com</p>' +
       '<div style="display:flex; flex-direction:column; gap:34px;">' + body + '</div>' +
     '</div>';
@@ -400,9 +395,9 @@
   // ---- Render & wire -----------------------------------------------------
   function render() {
     var main;
-    if (state.route === 'privacy') main = legal('Privacy Policy', false, PRIVACY);
-    else if (state.route === 'terms') main = legal('Terms of Service', false, TERMS);
-    else if (state.route === 'cookies') main = legal('Cookie Policy', false, COOKIES);
+    if (state.route === 'privacy') main = legal('Privacy Policy', PRIVACY);
+    else if (state.route === 'terms') main = legal('Terms of Service', TERMS);
+    else if (state.route === 'cookies') main = legal('Cookie Policy', COOKIES);
     else main = landing();
 
     app.setAttribute('data-theme', state.theme);
