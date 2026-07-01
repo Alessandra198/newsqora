@@ -103,10 +103,10 @@ In Namecheap: **Domain List → Manage → Advanced DNS**. Remove any default
 
 | Type  | Host | Value                       |
 |-------|------|-----------------------------|
-| CNAME | www  | <your-github-username>.github.io. |
+| CNAME | www  | Alessandra198.github.io. |
 
-> Replace `<your-github-username>` with the GitHub account (or org) that owns
-> this repo. This makes `www.newsqora.com` redirect to the apex domain.
+> `Alessandra198` is the GitHub account that owns this repo. This makes
+> `www.newsqora.com` redirect to the apex domain.
 
-DNS changes can take from a few minutes up to 24–48 hours to propagate.
+DNS changes can take from a few minutes up to 24-48 hours to propagate.
 After propagation, enable **Enforce HTTPS** in GitHub Pages settings.
