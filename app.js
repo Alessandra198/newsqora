@@ -7,6 +7,14 @@
   // ---- Constants & content ----------------------------------------------
   var EMAIL = ['hello', 'newsqora.com'].join('@'); // joined to dodge scanners
   var BETA_HREF = 'mailto:' + EMAIL + '?subject=Newsqora%20beta%20access';
+
+  // Beta waitlist backend. Set BETA_ENDPOINT to your EU serverless function URL
+  // (see BETA_BACKEND_SPEC.md). When empty, the form falls back to a prefilled
+  // email so it still works before the endpoint is live.
+  // NOTE: when you set a real URL, add its origin to connect-src in the CSP meta
+  // of every page head (index/beta/beta-terms/privacy/terms/cookies/404.html).
+  var BETA_ENDPOINT = '';
+  var POLICY_VERSION = '2026-06-24'; // Privacy Policy effective date, logged with consent
   var MAIL_HREF = 'mailto:' + EMAIL;
 
   var SECTIONS = ['top', 'how', 'trust', 'perspectives', 'follow'];
@@ -63,6 +71,8 @@
     { h: 'Analytics and consent', body: '<p style="margin:0">Any analytics used in the app is privacy-preserving and aggregate, and uses <strong style="color:var(--ink)">no advertising identifiers</strong>. It is enabled <strong style="color:var(--ink)">only after you give consent</strong>, never by default. You may withdraw consent at any time in the app settings, after which no further non-essential analytics is collected. The marketing website newsqora.com sets no cookies and uses no third-party trackers.</p>' },
     { h: 'On-device processing of screenshots', body: '<p style="margin:0">When you check a screenshot, the text is read from the image (OCR) <strong style="color:var(--ink)">entirely on your device</strong>. The image itself is <strong style="color:var(--ink)">never uploaded</strong> to us or to any third party. Only the resulting claim or text that you choose to verify leaves your device.</p>' },
     { h: 'AI processing of your query', body: '<p style="margin:0">To produce a sourced answer, the text you submit is processed by Google&rsquo;s Gemini models on Vertex AI. This is used solely to retrieve and summarise real sources and to generate the graded response. <strong style="color:var(--ink)">Your submissions are not used to train AI models</strong>, and are not used to build an advertising profile of you.</p>' },
+
+    { h: 'Anonymous quality logging', body: '<p style="margin:0 0 12px">Separately from any analytics, and <strong style="color:var(--ink)">not governed by the optional analytics opt-in</strong>, Newsqora keeps <strong style="color:var(--ink)">one anonymous quality record for each fact-check result</strong>. We use it to check and improve how well our confidence assessments match reality.</p><p style="margin:0 0 8px">Each record contains only:</p><ul style="margin:0 0 12px; padding-left:20px; display:flex; flex-direction:column; gap:7px"><li>the confidence band shown (for example, &ldquo;Well supported&rdquo;);</li><li>the model&rsquo;s internal confidence value;</li><li>how many sources were found and how many agreed;</li><li>the software version and a timestamp.</li></ul><p style="margin:0 0 8px">It <strong style="color:var(--ink)">never</strong> contains:</p><ul style="margin:0 0 12px; padding-left:20px; display:flex; flex-direction:column; gap:7px"><li>your name, email, or account;</li><li>any device identifier, not even a hashed one;</li><li>what you searched, or the result text.</li></ul><p style="margin:0 0 12px">Because it holds no identifier and no content, it cannot be linked back to you or to your saved investigations.</p><p style="margin:0 0 12px"><strong style="color:var(--ink)">Purpose and legal basis.</strong> These records are used only to measure and improve the accuracy and safety of Newsqora&rsquo;s confidence assessments; never for advertising or profiling, and they are not sold or shared. Because a record contains no personal identifier or content, it is anonymous; where such a record is nonetheless treated as personal data, we rely on our <strong style="color:var(--ink)">legitimate interest</strong> (Art. 6(1)(f) GDPR) in measuring and improving the quality and safety of the service.</p><p style="margin:0 0 12px"><strong style="color:var(--ink)">Storage and retention.</strong> Stored in the EU (Google Firestore, europe-west1), consistent with the rest of Newsqora&rsquo;s data, and kept for up to <strong style="color:var(--ink)">12 months</strong>, after which it is automatically deleted.</p><p style="margin:0"><strong style="color:var(--ink)">Your rights.</strong> Because these records carry no identifier, they cannot be tied to an individual, so they are not part of an account-deletion or data-access request (there is nothing to look up). The account data you can have erased is covered under Your rights and Retention above. Questions: <a href="mailto:hello@newsqora.com" style="color:var(--accent)">hello@newsqora.com</a>.</p>' },
     { h: 'Processors and sub-processors', body: '<p style="margin:0 0 12px">We use the following processors, who process data on our behalf under data-processing terms:</p><ul style="margin:0; padding-left:20px; display:flex; flex-direction:column; gap:7px"><li><strong style="color:var(--ink)">Google Cloud / Firebase (EU, Belgium)</strong>: hosting, database, and the back-end service that stores saved investigations.</li><li><strong style="color:var(--ink)">Google Vertex AI (EU)</strong>: processing of the submitted claim with Gemini to generate a sourced answer.</li><li><strong style="color:var(--ink)">Google authentication service (United States)</strong>: account identity and sign-in, under EU Standard Contractual Clauses.</li></ul>' },
     { h: 'Where we process your data, and international transfers', body: '<p style="margin:0 0 12px">We are deliberately precise about where your data is processed, and we do not claim that everything stays in the EU.</p><p style="margin:0 0 12px"><strong style="color:var(--ink)">In the EU (Google Cloud, Belgium).</strong> Your saved investigations and the database, the AI fact-checking (Google Gemini on Vertex AI), and the back-end service all run in the EU. The text or screenshot content you submit is processed in the EU and is <strong style="color:var(--ink)">never sent to the authentication service</strong>.</p><p style="margin:0 0 12px"><strong style="color:var(--ink)">In the United States (Google authentication service, under EU Standard Contractual Clauses).</strong> Only your <strong style="color:var(--ink)">account identity</strong> is handled here: your Google name, email address, profile photo, and sign-in timestamps. The content you submit is never sent to this service.</p><p style="margin:0">Analytics data, where you have consented, may also be processed by Google outside the EU. These transfers are governed by <strong style="color:var(--ink)">Standard Contractual Clauses</strong> approved by the European Commission, together with the supplementary measures applied by the relevant Google services.</p>' },
     { h: 'Retention and deletion', body: '<p style="margin:0 0 12px">Saved investigations are retained until you delete them, or for no longer than is <strong style="color:var(--ink)">necessary for the private beta</strong> after your last activity, whichever is sooner. Text submitted for analysis is retained only as long as needed to produce and return an answer, plus a <strong style="color:var(--ink)">short period</strong> thereafter for security and reliability. We keep data for the shortest period the beta requires; specific periods will be confirmed at general release.</p><p style="margin:0">You can delete individual investigations or folders at any time in the app. To delete all data associated with your account, use the in-app deletion option or contact us.</p>' },
@@ -98,6 +108,17 @@
     { h: 'Contact', body: '<p style="margin:0">Questions about this Cookie Policy: <a href="mailto:hello@newsqora.com" style="color:var(--accent)">hello@newsqora.com</a>.</p>' }
   ];
 
+  var BETA_TERMS = [
+    { h: 'About this agreement', body: '<p style="margin:0">This Beta Tester Agreement applies to the closed (private) beta of the Newsqora Android app, operated by <strong style="color:var(--ink)">Alessandra Rinaldo, based in Spain</strong>. By joining the beta or using a beta build, you agree to it, in addition to our <a href="/terms" data-link="terms" style="color:var(--accent)">Terms of Service</a> and <a href="/privacy" data-link="privacy" style="color:var(--accent)">Privacy Policy</a>.</p>' },
+    { h: 'Pre-release software', body: '<p style="margin:0">The beta is <strong style="color:var(--ink)">pre-release software provided for testing and evaluation</strong>. It is not the finished product. It may change, be updated, break, or be withdrawn at any time, and data created during the beta may be modified or deleted. Do not rely on it for anything important.</p>' },
+    { h: 'No warranty and not professional advice', body: '<p style="margin:0">The beta is provided &ldquo;as is&rdquo; and &ldquo;as available&rdquo;, without warranties of any kind, to the fullest extent permitted by law. Newsqora provides information only and does not give medical, legal, financial, or other professional advice; its output must not be relied upon as such. This mirrors the in-app disclaimer.</p>' },
+    { h: 'Feedback', body: '<p style="margin:0">We welcome your feedback. By sending feedback, suggestions, or ideas about the beta, you grant us a perpetual, worldwide, royalty free licence to use them to improve Newsqora, without obligation or compensation.</p>' },
+    { h: 'Confidentiality', body: '<p style="margin:0">The beta may include unreleased features and information that are not public. Please keep them confidential and do not publish screenshots, benchmarks, or details of unreleased features without our permission, until they are officially released.</p>' },
+    { h: 'Data and privacy', body: '<p style="margin:0">Data in the beta is handled as described in our <a href="/privacy" data-link="privacy" style="color:var(--accent)">Privacy Policy</a>, including EU processing of your content and saved data, Google sign-in for account identity, and the anonymous quality logging described there. The GDPR applies in full.</p>' },
+    { h: 'Access may be revoked', body: '<p style="margin:0">Beta access is invitation-only and personal to you. We may add, limit, suspend, or revoke access at any time, including if these terms or our Terms of Service are not respected, or when the beta ends.</p>' },
+    { h: 'Contact', body: '<p style="margin:0">Questions about the beta: <a href="mailto:hello@newsqora.com" style="color:var(--accent)">hello@newsqora.com</a>.</p>' }
+  ];
+
   // ---- State -------------------------------------------------------------
   var app = document.getElementById('app');
   var state = { route: 'home', theme: 'dark', active: 'top', menuOpen: false };
@@ -108,6 +129,8 @@
     if (p === '/privacy') return 'privacy';
     if (p === '/terms') return 'terms';
     if (p === '/cookies') return 'cookies';
+    if (p === '/beta') return 'beta';
+    if (p === '/beta-terms') return 'beta-terms';
     return 'home';
   }
 
@@ -133,6 +156,16 @@
       title: 'Cookie Policy · Newsqora',
       desc: 'The Newsqora website uses no cookies and no tracking. This Cookie Policy explains what that means and how the site handles data.',
       path: '/cookies'
+    },
+    beta: {
+      title: 'Request beta access · Newsqora',
+      desc: 'Join the Newsqora closed Android beta. Newsqora is an AI fact-checking tool that traces claims to real sources. Request an invite with your Google account.',
+      path: '/beta'
+    },
+    'beta-terms': {
+      title: 'Beta Tester Agreement · Newsqora',
+      desc: 'The Beta Tester Agreement for the Newsqora closed Android beta: pre-release software, feedback, confidentiality, data handling, and access.',
+      path: '/beta-terms'
     }
   };
 
@@ -166,7 +199,7 @@
     return '' +
     '<div style="background:var(--accent); color:#fff; font-size:13px; font-weight:600; letter-spacing:.01em; text-align:center; padding:9px 16px;">' +
       '<span style="opacity:.9;">Newsqora is in private beta.</span>' +
-      '<a href="' + BETA_HREF + '" style="color:#fff; text-decoration:underline; text-underline-offset:2px; margin-left:6px;">Request access</a>' +
+      '<a href="/beta" data-link="beta" style="color:#fff; text-decoration:underline; text-underline-offset:2px; margin-left:6px;">Request access</a>' +
     '</div>' +
     '<header style="position:sticky; top:0; z-index:40; backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%); background:color-mix(in srgb, var(--paper) 82%, transparent); border-bottom:1px solid var(--hairline);">' +
       '<div class="nq-headbar" style="max-width:1140px; margin:0 auto; padding:14px clamp(20px,5vw,40px); display:flex; align-items:center; justify-content:space-between; gap:24px; position:relative;">' +
@@ -182,7 +215,7 @@
           '<button data-action="theme" aria-label="Toggle colour theme" style="width:38px; height:38px; display:inline-flex; align-items:center; justify-content:center; background:transparent; border:1px solid var(--hairline-strong); border-radius:10px; color:var(--ink); margin-left:6px; cursor:pointer;">' +
             '<span style="font-size:15px;">' + (state.theme === 'dark' ? '☀' : '☾') + '</span>' +
           '</button>' +
-          '<a href="' + BETA_HREF + '" style="font-size:14px; font-weight:600; color:#fff; background:var(--accent); text-decoration:none; padding:10px 16px; border-radius:11px; margin-left:6px; white-space:nowrap;">Request beta</a>' +
+          '<a href="/beta" data-link="beta" style="font-size:14px; font-weight:600; color:#fff; background:var(--accent); text-decoration:none; padding:10px 16px; border-radius:11px; margin-left:6px; white-space:nowrap;">Request beta</a>' +
         '</nav>' +
       '</div>' +
     '</header>';
@@ -235,7 +268,7 @@
         '<h1 style="font-family:\'Newsreader\',Georgia,serif; font-weight:400; font-size:clamp(38px,6.4vw,72px); line-height:1.05; letter-spacing:-.022em; margin:0; max-width:16ch; text-wrap:balance;">Every question is welcome. Every answer is honest.</h1>' +
         '<p style="font-size:clamp(16px,2vw,20px); line-height:1.55; color:var(--ink-soft); max-width:60ch; margin:0; text-wrap:pretty;">Newsqora verifies claims, links, and screenshots against real sources, and returns a graded confidence, never a binary true or false, with every citation listed: who said it, when, and where.</p>' +
         '<div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:6px;">' +
-          '<a href="' + BETA_HREF + '" style="font-size:16px; font-weight:600; color:#fff; background:var(--accent); text-decoration:none; padding:15px 24px; border-radius:13px; box-shadow:var(--shadow-md);">Request beta access</a>' +
+          '<a href="/beta" data-link="beta" style="font-size:16px; font-weight:600; color:#fff; background:var(--accent); text-decoration:none; padding:15px 24px; border-radius:13px; box-shadow:var(--shadow-md);">Request beta access</a>' +
           '<span style="font-size:16px; font-weight:600; color:var(--ink); background:var(--card); border:1px solid var(--hairline); padding:15px 24px; border-radius:13px; box-shadow:var(--shadow-sm); display:inline-flex; align-items:center; gap:9px;"><span style="width:7px; height:7px; border-radius:50%; background:var(--honey);"></span>Coming to Android</span>' +
         '</div>' +
         '<div style="display:flex; flex-wrap:wrap; gap:9px; justify-content:center; margin-top:8px;">' + promises + '</div>' +
@@ -345,6 +378,61 @@
     '</div>';
   }
 
+  function field(label, name, opts) {
+    opts = opts || {};
+    var req = opts.required ? ' <span style="color:var(--accent)">*</span>' : ' <span style="color:var(--ink-mute); font-weight:400;">(optional)</span>';
+    var inputStyle = 'width:100%; padding:12px 14px; border-radius:11px; border:1px solid var(--hairline); background:var(--paper); color:var(--ink); font-family:inherit; font-size:15px; box-sizing:border-box;';
+    var control;
+    if (opts.type === 'textarea') {
+      control = '<textarea id="bf-' + name + '" name="' + name + '" rows="3"' + (opts.required ? ' required' : '') + ' style="' + inputStyle + ' resize:vertical;"></textarea>';
+    } else if (opts.type === 'select') {
+      var options = opts.options.map(function (o) { return '<option value="' + o + '">' + o + '</option>'; }).join('');
+      control = '<select id="bf-' + name + '" name="' + name + '" style="' + inputStyle + '"><option value="">Choose…</option>' + options + '</select>';
+    } else {
+      control = '<input id="bf-' + name + '" name="' + name + '" type="' + (opts.type || 'text') + '"' + (opts.required ? ' required' : '') + (opts.inputmode ? ' inputmode="' + opts.inputmode + '"' : '') + ' style="' + inputStyle + '">';
+    }
+    var help = opts.help ? '<p style="margin:6px 0 0; font-size:12.5px; line-height:1.5; color:var(--ink-mute);">' + opts.help + '</p>' : '';
+    return '<div style="display:flex; flex-direction:column; gap:7px;">' +
+      '<label for="bf-' + name + '" style="font-size:14px; font-weight:600; color:var(--ink);">' + label + req + '</label>' +
+      control + help +
+    '</div>';
+  }
+
+  function betaPage() {
+    return '<div style="max-width:600px; margin:0 auto; padding:clamp(40px,7vw,72px) clamp(20px,5vw,40px) clamp(56px,9vw,88px);">' +
+      // Hero
+      '<div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:18px; margin-bottom:clamp(32px,5vw,44px);">' +
+        '<img src="newsqora-mark.svg" alt="" width="60" height="37" style="width:clamp(56px,10vw,68px); height:auto; filter:drop-shadow(0 12px 28px rgba(109,32,255,0.22));">' +
+        '<div style="display:inline-flex; align-items:center; gap:8px; font-family:\'IBM Plex Mono\',monospace; font-size:11.5px; letter-spacing:.04em; text-transform:uppercase; color:var(--accent); background:var(--accent-bg); padding:6px 12px; border-radius:999px;"><span class="nq-pulse-dot" style="width:6px; height:6px; border-radius:50%; background:var(--accent);"></span>Invite-only Android beta</div>' +
+        '<h1 style="font-family:\'Newsreader\',Georgia,serif; font-weight:400; font-size:clamp(30px,5.4vw,48px); line-height:1.08; letter-spacing:-.02em; margin:0; max-width:18ch; text-wrap:balance;">Request early access to Newsqora.</h1>' +
+        '<p style="font-size:clamp(15px,2vw,18px); line-height:1.55; color:var(--ink-soft); max-width:52ch; margin:0; text-wrap:pretty;">Newsqora is an AI fact-checking tool that traces claims, links, and screenshots to real sources and grades how well they hold up. It is opening gradually as a closed Android beta. Leave your details and we will email you an invite when a spot opens.</p>' +
+      '</div>' +
+
+      // Form card
+      '<form id="beta-form" novalidate style="background:var(--card); border:1px solid var(--hairline); border-radius:16px; box-shadow:var(--shadow-md); padding:clamp(20px,4vw,28px); display:flex; flex-direction:column; gap:18px;">' +
+        field('Name', 'name', { required: true }) +
+        field('Google account email', 'googleEmail', { required: true, type: 'email', inputmode: 'email', help: 'Use the Google account signed in on your Android phone. Play Store beta access is granted to this exact account, so a Gmail or Google Workspace address is required.' }) +
+        field('Country', 'country', { help: 'Optional, but helps us prioritise. Our first testers are mostly in Italy.' }) +
+        field('Preferred language', 'language', { type: 'select', options: ['Italian', 'English'] }) +
+        field('What would you use Newsqora for?', 'useCase', { type: 'textarea' }) +
+        field('How did you hear about us?', 'referral', { help: 'For example, a friend shared a fact-check.' }) +
+        // honeypot (hidden from humans; bots fill it)
+        '<div aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;"><label>Company<input type="text" name="company" tabindex="-1" autocomplete="off"></label></div>' +
+        // consent
+        '<label style="display:flex; align-items:flex-start; gap:11px; font-size:14px; line-height:1.5; color:var(--ink-soft); cursor:pointer;">' +
+          '<input type="checkbox" id="bf-consent" name="consent" style="margin-top:3px; width:18px; height:18px; accent-color:var(--accent); flex-shrink:0;">' +
+          '<span>I agree to be contacted about the Newsqora beta and I have read the <a href="/privacy" data-link="privacy" style="color:var(--accent);">Privacy Policy</a>. <span style="color:var(--accent)">*</span></span>' +
+        '</label>' +
+        '<div id="beta-msg" role="status" aria-live="polite" style="display:none; font-size:14px; line-height:1.5; padding:12px 14px; border-radius:11px;"></div>' +
+        '<button type="submit" id="beta-submit" style="font-size:16px; font-weight:600; color:#fff; background:var(--accent); border:none; text-decoration:none; padding:15px 24px; border-radius:13px; box-shadow:var(--shadow-md); cursor:pointer;">Request beta access</button>' +
+        '<p style="font-size:13px; line-height:1.5; color:var(--ink-mute); margin:0; text-align:center;">No spam. We will only email you about your beta access. Prefer email? Write to <a href="' + MAIL_HREF + '" style="color:var(--accent);">' + EMAIL + '</a>.</p>' +
+      '</form>' +
+
+      // privacy note
+      '<p style="font-size:12.5px; line-height:1.6; color:var(--ink-mute); margin:18px 0 0; max-width:60ch;">We use your details only to contact you about the Newsqora beta and to manage the waitlist: no marketing, no sharing with third parties, no ad trackers. Your submission is stored in the EU, with the time you gave consent and the policy version. You can ask us to delete your details at any time via <a href="mailto:hello@newsqora.com" style="color:var(--accent);">hello@newsqora.com</a>.</p>' +
+    '</div>';
+  }
+
   function follow() {
     var btns = SOCIALS.map(function (s) {
       return '<a class="nq-social" href="' + s.href + '" target="_blank" rel="noopener noreferrer" aria-label="' + s.name + '" title="' + s.name + '" style="display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:14px; color:#fff; background:var(--accent); box-shadow:0 2px 10px color-mix(in srgb, var(--accent) 28%, transparent); transition:transform .2s ease, box-shadow .2s ease, background .2s ease;">' +
@@ -398,6 +486,8 @@
     if (state.route === 'privacy') main = legal('Privacy Policy', PRIVACY);
     else if (state.route === 'terms') main = legal('Terms of Service', TERMS);
     else if (state.route === 'cookies') main = legal('Cookie Policy', COOKIES);
+    else if (state.route === 'beta-terms') main = legal('Beta Tester Agreement', BETA_TERMS);
+    else if (state.route === 'beta') main = betaPage();
     else main = landing();
 
     app.setAttribute('data-theme', state.theme);
@@ -408,7 +498,8 @@
 
   function navigate(route, opts) {
     opts = opts || {};
-    var path = route === 'privacy' ? '/privacy' : route === 'terms' ? '/terms' : route === 'cookies' ? '/cookies' : '/';
+    var paths = { privacy: '/privacy', terms: '/terms', cookies: '/cookies', beta: '/beta', 'beta-terms': '/beta-terms' };
+    var path = paths[route] || '/';
     if (!opts.replace) history.pushState({ route: route }, '', path + (opts.hash || ''));
     state.route = route;
     state.active = 'top';
@@ -476,6 +567,75 @@
     var link = t.getAttribute('data-link');
     if (link) { e.preventDefault(); navigate(link); }
   });
+
+  // Beta waitlist form submission
+  app.addEventListener('submit', function (e) {
+    if (!e.target.closest('#beta-form')) return;
+    e.preventDefault();
+    handleBetaSubmit(e.target);
+  });
+
+  function betaMsg(kind, html) {
+    var box = document.getElementById('beta-msg');
+    if (!box) return;
+    var colors = {
+      error: 'color:var(--c-disputed); background:var(--c-disputed-bg);',
+      ok: 'color:var(--c-trust); background:var(--c-trust-bg);'
+    };
+    box.style.cssText = 'font-size:14px; line-height:1.5; padding:12px 14px; border-radius:11px; display:block; ' + (colors[kind] || '');
+    box.innerHTML = html;
+  }
+
+  function handleBetaSubmit(form) {
+    var val = function (n) { var el = form.elements[n]; return el ? String(el.value || '').trim() : ''; };
+    // honeypot: bots fill this; silently accept without sending
+    if (val('company')) { betaMsg('ok', 'Thanks, you are on the list.'); return; }
+
+    var name = val('name');
+    var email = val('googleEmail');
+    var consent = form.elements['consent'] && form.elements['consent'].checked;
+    if (!name) { betaMsg('error', 'Please enter your name.'); return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { betaMsg('error', 'Please enter a valid email address.'); return; }
+    if (!consent) { betaMsg('error', 'Please tick the consent box so we can contact you about the beta.'); return; }
+
+    var payload = {
+      name: name, googleEmail: email, country: val('country'), language: val('language'),
+      useCase: val('useCase'), referral: val('referral'), consent: true,
+      consentTimestamp: new Date().toISOString(), policyVersion: POLICY_VERSION,
+      source: 'website', createdAt: new Date().toISOString()
+    };
+
+    var btn = document.getElementById('beta-submit');
+
+    // No endpoint yet: fall back to a prefilled email so the page still works.
+    if (!BETA_ENDPOINT) {
+      var body = 'Beta access request\n\n'
+        + 'Name: ' + name + '\nGoogle account email: ' + email
+        + '\nCountry: ' + payload.country + '\nPreferred language: ' + payload.language
+        + '\nUse case: ' + payload.useCase + '\nHeard about us: ' + payload.referral
+        + '\nConsent: yes (' + payload.consentTimestamp + ', policy ' + POLICY_VERSION + ')';
+      window.location.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent('Newsqora beta access request') + '&body=' + encodeURIComponent(body);
+      betaMsg('ok', 'Opening your email app to finish. If nothing happens, email <a href="mailto:' + EMAIL + '" style="color:inherit; text-decoration:underline;">' + EMAIL + '</a> and we will add you.');
+      return;
+    }
+
+    if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; btn.textContent = 'Sending…'; }
+    betaMsg('ok', 'Sending…');
+    fetch(BETA_ENDPOINT, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+    }).then(function (r) {
+      return r.ok ? r.json().catch(function () { return {}; }) : Promise.reject(r.status);
+    }).then(function (data) {
+      var already = data && data.status === 'exists';
+      form.querySelectorAll('input,textarea,select,button').forEach(function (el) { el.disabled = true; });
+      betaMsg('ok', already
+        ? 'You are already on the list: we have your details and will email <strong>' + email + '</strong> when a spot opens.'
+        : 'You are on the list. We will email <strong>' + email + '</strong> when a spot opens.');
+    }).catch(function () {
+      if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.textContent = 'Request beta access'; }
+      betaMsg('error', 'Something went wrong sending your request. Please try again, or email <a href="mailto:' + EMAIL + '" style="color:inherit; text-decoration:underline;">' + EMAIL + '</a>.');
+    });
+  }
 
   window.addEventListener('popstate', function () {
     state.route = routeFromPath();
