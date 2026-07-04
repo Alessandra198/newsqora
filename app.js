@@ -13,7 +13,7 @@
   // email so it still works before the endpoint is live.
   // NOTE: when you set a real URL, add its origin to connect-src in the CSP meta
   // of every page head (index/beta/beta-terms/privacy/terms/cookies/404.html).
-  var BETA_ENDPOINT = '';
+  var BETA_ENDPOINT = 'https://europe-west1-newsqora.cloudfunctions.net/betaWaitlist';
   var POLICY_VERSION = '2026-06-24'; // Privacy Policy effective date, logged with consent
   var MAIL_HREF = 'mailto:' + EMAIL;
 
