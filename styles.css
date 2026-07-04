@@ -2,7 +2,10 @@
    Re-implemented from the design handoff. Light is the default theme. */
 
 html, body { margin: 0; padding: 0; }
-body { background: #E9E3D8; }
+html { color-scheme: dark light; }
+/* Dark is the primary mode: the stage behind #app defaults to the dark stage
+   so there is no light flash before the app paints on first load. */
+body { background: #08060d; }
 *, *::before, *::after { box-sizing: border-box; }
 ::selection { background: var(--accent-bg); color: var(--ink); }
 
