@@ -22,6 +22,7 @@ ROUTES = [  # (static file, URL path)
     ("cookies.html", "/cookies"),
     ("beta.html", "/beta"),
     ("beta-terms.html", "/beta-terms"),
+    ("delete-account.html", "/delete-account"),
 ]
 EMPTY_APP = '<div id="app" data-theme="light"></div>'
 
