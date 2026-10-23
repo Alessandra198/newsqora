@@ -16,6 +16,7 @@ GitHub Pages serves these static files directly — **no build step**.
 | `fonts.css` + `fonts/` | Self-hosted fonts (Newsreader, Hanken Grotesk, IBM Plex Mono) — GDPR: no Google Fonts CDN calls |
 | `newsqora-mark.svg`, `logo.png`, `logo-square.png` | Brand assets (`logo-square.png` is used for JSON-LD / social cards) |
 | `404.html` | Copy of `index.html` — SPA fallback for any genuinely unknown path |
+| `goatcounter.js` | GoatCounter's counting script (ISC licence), copied unchanged and served from our own domain for the anonymous visit count |
 | `CNAME` | Tells GitHub Pages the custom domain is `newsqora.com` |
 | `.nojekyll` | Disables Jekyll processing |
 
