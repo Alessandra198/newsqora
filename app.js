@@ -68,7 +68,7 @@
     { h: 'Privacy by design', body: '<p style="margin:0 0 12px">Newsqora is built to collect only what the service genuinely needs. <strong style="color:var(--ink)">During the beta, signing in with Google is required to use Newsqora</strong>: an account is necessary to save your investigations to folders, keep your history, sync across your devices, and let us provide support. Through Google sign-in we receive your <strong style="color:var(--ink)">name, email address, and profile photo</strong>.</p><p style="margin:0">Separately, screenshots are processed on your device and are never uploaded, and any usage analytics is <strong style="color:var(--ink)">optional and opt-in</strong>; see Analytics below.</p>' },
     { h: 'Categories of data we process', body: '<p style="margin:0 0 12px">During the beta, signing in is required, so we process:</p><ul style="margin:0; padding-left:20px; display:flex; flex-direction:column; gap:9px"><li><strong style="color:var(--ink)">Account identity.</strong> Through Google sign-in we receive your name, email address, and profile photo, together with sign-in timestamps, to identify your account.</li><li><strong style="color:var(--ink)">The claim or text you submit.</strong> The wording you choose to fact-check, sent for analysis to produce a sourced answer.</li><li><strong style="color:var(--ink)">Saved investigations.</strong> Verifications and folders you choose to save, stored under your account.</li><li><strong style="color:var(--ink)">Anonymous usage analytics.</strong> Privacy-preserving, aggregate usage statistics with no advertising identifiers, processed <strong style="color:var(--ink)">only if you give separate, optional consent</strong> (see Analytics below). Declining analytics does not affect your use of the app.</li></ul>' },
     { h: 'Purposes and legal bases', body: '<p style="margin:0 0 12px">We process each category for a specific purpose and on a specific legal basis under Article 6 GDPR:</p><ul style="margin:0; padding-left:20px; display:flex; flex-direction:column; gap:9px"><li><strong style="color:var(--ink)">Providing the service</strong> (Google sign-in, processing your submitted claim, storing and syncing your saved investigations): <strong style="color:var(--ink)">performance of our agreement with you</strong> (Art. 6(1)(b)). An account is necessary to deliver these features during the beta.</li><li><strong style="color:var(--ink)">Usage analytics:</strong> your <strong style="color:var(--ink)">separate, optional consent</strong> (Art. 6(1)(a)). This is never bundled with sign-in; you may decline it and still use the app, and withdraw it at any time.</li><li><strong style="color:var(--ink)">Security and abuse prevention:</strong> our legitimate interest in keeping the service safe and reliable (Art. 6(1)(f)).</li></ul>' },
-    { h: 'Analytics and consent', body: '<p style="margin:0">Any analytics used in the app is privacy-preserving and aggregate, and uses <strong style="color:var(--ink)">no advertising identifiers</strong>. It is enabled <strong style="color:var(--ink)">only after you give consent</strong>, never by default. You may withdraw consent at any time in the app settings, after which no further non-essential analytics is collected. The marketing website newsqora.com sets no cookies and uses no third-party trackers.</p>' },
+    { h: 'Analytics and consent', body: '<p style="margin:0">Any analytics used in the app is privacy-preserving and aggregate, and uses <strong style="color:var(--ink)">no advertising identifiers</strong>. It is enabled <strong style="color:var(--ink)">only after you give consent</strong>, never by default. You may withdraw consent at any time in the app settings, after which no further non-essential analytics is collected. The marketing website newsqora.com sets no cookies; it uses GoatCounter, a privacy-friendly, cookieless analytics service that stores no personal data, and no other third-party trackers.</p>' },
     { h: 'On-device processing of screenshots', body: '<p style="margin:0">When you check a screenshot, the text is read from the image (OCR) <strong style="color:var(--ink)">entirely on your device</strong>. The image itself is <strong style="color:var(--ink)">never uploaded</strong> to us or to any third party. Only the resulting claim or text that you choose to verify leaves your device.</p>' },
     { h: 'AI processing of your query', body: '<p style="margin:0">To produce a sourced answer, the text you submit is processed by Google&rsquo;s Gemini models on Vertex AI. This is used solely to retrieve and summarise real sources and to generate the graded response. <strong style="color:var(--ink)">Your submissions are not used to train AI models</strong>, and are not used to build an advertising profile of you.</p>' },
 
@@ -101,7 +101,7 @@
 
   var COOKIES = [
     { h: 'This website uses no cookies', body: '<p style="margin:0">The Newsqora marketing website (newsqora.com) <strong style="color:var(--ink)">does not use cookies</strong>. It sets no cookies of its own and uses no third-party cookies. There is therefore no cookie banner, because there is nothing to consent to.</p>' },
-    { h: 'No tracking and no third-party services', body: '<p style="margin:0 0 12px">This website runs <strong style="color:var(--ink)">no analytics, advertising, or tracking scripts</strong> of any kind: no Google Analytics, no advertising pixels, and no social-media tracking.</p><p style="margin:0">Fonts are <strong style="color:var(--ink)">self-hosted</strong> on our own domain rather than loaded from a third-party font service, so visiting the site makes no calls to outside providers. Links to our social media profiles are ordinary links: they load nothing until you choose to click them, at which point the destination site applies its own cookie and privacy policies.</p>' },
+    { h: 'Analytics (privacy-friendly and cookieless)', body: '<p style="margin:0 0 12px">This website uses <strong style="color:var(--ink)">GoatCounter</strong>, an open-source, privacy-friendly analytics service, to understand aggregate traffic such as page views and referrers. It is <strong style="color:var(--ink)">cookieless</strong>, sets nothing on your device, collects <strong style="color:var(--ink)">no personal data</strong>, uses no advertising identifiers, and does not track you across other websites. Because it stores no personal data and sets no cookies, no consent banner is required.</p><p style="margin:0">Aside from GoatCounter, the site runs no other analytics, advertising, or tracking scripts, and fonts are <strong style="color:var(--ink)">self-hosted</strong> rather than loaded from a third-party font service. Links to our social media profiles are ordinary links: they load nothing until you choose to click them, at which point the destination site applies its own cookie and privacy policies.</p>' },
     { h: 'Nothing is stored on your device', body: '<p style="margin:0">Beyond setting no cookies, the site stores nothing on your device: no local storage and no session storage. Your browser may temporarily cache static files such as fonts and images to load the page faster; this is standard browser caching, contains no personal data, and is controlled entirely by your browser settings.</p>' },
     { h: 'The Newsqora app', body: '<p style="margin:0">This Cookie Policy covers the website only. How the Newsqora mobile application handles data, including sign-in and optional analytics, is described in our <a href="/privacy" data-link="privacy" style="color:var(--accent)">Privacy Policy</a>.</p>' },
     { h: 'Changes to this policy', body: '<p style="margin:0">If we ever introduce cookies or third-party services on this website, we will update this policy and, where the law requires it, ask for your consent before any non-essential cookie is set.</p>' },
@@ -522,6 +522,17 @@
     state.active = 'top';
     render();
     if (!opts.keepScroll) window.scrollTo({ top: 0, behavior: 'auto' });
+    countPageview();
+  }
+
+  // Record a GoatCounter pageview on client-side navigation (the initial load is
+  // auto-counted by count.js). GoatCounter is cookieless and stores no personal data.
+  function countPageview() {
+    try {
+      if (window.goatcounter && window.goatcounter.count) {
+        window.goatcounter.count({ path: location.pathname + location.search + location.hash });
+      }
+    } catch (e) {}
   }
 
   function scrollToSection(id) {
@@ -658,6 +669,7 @@
     state.route = routeFromPath();
     state.active = 'top';
     render();
+    countPageview();
   });
 
   var onScroll = function () { computeActive(); };

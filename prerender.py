@@ -11,10 +11,26 @@ still loads and re-renders on top for interactivity (progressive enhancement).
 
 Re-run this after editing content in app.js:  python3 prerender.py
 """
-import http.server, socketserver, threading, os, subprocess, sys
+import http.server, socketserver, threading, os, subprocess, sys, glob
 
-CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome"
-PORT = 8155
+def _find_chrome():
+    # Playwright's bundled Chromium path changes with each version bump, so
+    # resolve it dynamically instead of hard-coding it.
+    pats = [
+        "/opt/pw-browsers/chromium-*/chrome-linux*/chrome",
+        "/opt/pw-browsers/chromium-*/chrome-linux*/headless_shell",
+    ]
+    hits = []
+    for p in pats:
+        hits += glob.glob(p)
+    if not hits:
+        raise FileNotFoundError("no bundled Chromium found under /opt/pw-browsers")
+    # pick the highest version directory
+    hits.sort(key=lambda x: int("".join(c for c in x.split("chromium-")[1].split("/")[0] if c.isdigit()) or 0))
+    return hits[-1]
+
+CHROME = _find_chrome()
+PORT = 8196
 ROUTES = [  # (static file, URL path)
     ("index.html", "/"),
     ("privacy.html", "/privacy"),
@@ -53,10 +69,13 @@ class H(http.server.SimpleHTTPRequestHandler):
 
 
 def rendered_app(url):
+    # Block external hosts (e.g. the GoatCounter analytics script) so they can't
+    # hang the headless load during pre-render; all first-party assets are local.
     out = subprocess.run(
         [CHROME, "--headless=new", "--no-sandbox", "--disable-gpu",
+         "--host-resolver-rules=MAP gc.zgo.at 127.0.0.1:1,MAP *.goatcounter.com 127.0.0.1:1",
          "--virtual-time-budget=4000", "--dump-dom", url],
-        capture_output=True, text=True).stdout
+        capture_output=True, text=True, timeout=45).stdout
     start = out.find('<div id="app"')
     end = out.find('<script src="app.js"')
     if start == -1 or end == -1 or end < start:
@@ -65,6 +84,7 @@ def rendered_app(url):
 
 
 def main():
+    socketserver.TCPServer.allow_reuse_address = True
     srv = socketserver.TCPServer(("127.0.0.1", PORT), H)
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     try:
